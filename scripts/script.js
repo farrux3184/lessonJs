@@ -1,73 +1,38 @@
-'use srtict';
+'use strict';
 
-const todoControl = document.querySelector('.todo-control'),
-    headerInput = document.querySelector('.header-input'),
-    todoList = document.querySelector('.todo-list'),
-    todoCompleted = document.querySelector('.todo-completed'),
-    todoRemove = document.querySelector ('.todo-remove');
+const body = document.querySelector('body');
 
-let todoData = JSON.parse(localStorage.getItem('newTodo'));
-      if (todoData === null) {
-    todoData = [];
-      } else {
-    todoData = JSON.parse(localStorage.getItem('newTodo'));
+function DomElement(selector, height, width, bg, fontSize) {
+  this.selector = selector;
+  this.height = height;
+  this.width = width;
+  this.bg = bg;
+  this.fontSize = fontSize;
 }
-const render = function(){
-    todoList.textContent = '';
-    todoCompleted.textContent = '';
 
-    localStorage.setItem('newTodo', JSON.stringify(todoData));
-
-    todoData.forEach(function(item, i){
-const li = document.createElement('li');
-    li.classList.add('todo-item');
-
-    li.innerHTML = '<span class="text-todo">' + item.value + '</span>' + 
-    '<div class="todo-buttons">' +
-    '<button class="todo-remove"></button>' +
-    '<button class="todo-complete"></button>' +
-    '</div>';
-
-    if(item.completed) {
-    todoCompleted.append(li);
-      } else {
-    todoList.append(li);
+DomElement.prototype.render = function () {
+  let addElement;
+  if (this.selector[0] === '.') {
+    addElement = document.createElement('div');
+    addElement.classList.add('block');
+  } else if (this.selector[0] === '#') {
+    addElement = document.createElement('p');
+    addElement.classList.add('best');
   }
-        
-const btnTodoComplete = li.querySelector('.todo-complete');
-    
-    btnTodoComplete.addEventListener('click', function(){
-    item.completed = !item.completed;
-    render();
-  });
 
-const btnTodoRemove = li.querySelector('.todo-remove');
-     
-    btnTodoRemove.addEventListener('click', function () {
-    todoData.splice(i, 1);
-    render();
-  });
-});
-    headerInput.value = '';
-  };
-const showText = function(){
-    todoData.textContent = localStorege.data;
+  addElement.style.cssText =` 
+    height:  ${this.height}px;
+    width:  ${this.width}px;
+    background:  ${this.bg};
+    font-size:  ${this.fontSize}px;`
+  
+  addElement.textContent = 'hello world';
+  body.append(addElement);
+  console.log('addElement: ', addElement);
 };
-    todoControl.addEventListener('submit', function(event){
-    event.preventDefault();
-      if (headerInput.value === ''){
-    return;
-      } else {
-    const newTodo = {
-    value: headerInput.value,
-    completed: false
-        
-  };
-      
-    todoData.push(newTodo);
-    localStorage.setItem('newTodo', JSON.stringify(todoData));
-    render();
-  }     
-  });
-  render();
-    
+
+let newDomElements = new DomElement('.id', 150, 200, 'blue', 36);
+newDomElements.render();
+
+let newDomElements2 = new DomElement('#id', 75, 100, 'red', 20);
+newDomElements2.render();
