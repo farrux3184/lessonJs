@@ -1,18 +1,46 @@
-'use strict';
+// 'use strict';
 
-class First {
-  hello() {
-    console.log("Привет я метод родителя!");
+const output = document.getElementById('output');
+
+const getData = (url) => {
+  return new Promise((resolve, reject) => {
+    const request = new XMLHttpRequest();
+request.open('GET', url);
+request.addEventListener('readystatechange', () => {
+  if (request.readyState !== 4){
+      return;
   }
-}
-
-class Second extends First {
-  hello() {
-    super.hello();
-    console.log("А я наследуемый метод!");
+  if (request.status === 200){
+    const response = JSON.parse(request.responseText);
+    resolve(response);
+  } else {
+    reject(request.statusText);
   }
-}
+});
+request.send();
+});
 
-let myClass = new Second();
-myClass.hello();
+};
+const outputPhotos = (data) => {
+  // const random = Math.floor(Math.random() * data.length);
+  const obj = data[random];
+    output.innerHTML = `<h2>${obj.title}</h2>
+                        <img src="${obj.thumbnailUrl}" alt="${obj.title}">`;
 
+};
+const urlPhotos = 'https://jsonplaceholder.typicode.com/photos';
+
+const oneImg = getData('https://jsonplaceholder.typicode.com/photos/1'),
+    twoImg = getData('https://jsonplaceholder.typicode.com/photos/2');
+
+  oneImg
+    .then(outputPhotos)
+    .catch(error => console.log(error));  
+    twoImg
+    .then(outputPhotos)
+    .catch(error => console.log(error));  
+// Promise.all([oneImg, twoImg])
+
+// getData(urlPhotos)
+//   .then(outputPhotos)
+//   .catch(error => console.error(error));
